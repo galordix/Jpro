@@ -1,0 +1,19 @@
+﻿  Funkcje.cpp
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(8,25): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(9,26): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(14,27): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(15,26): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(19,29): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(20,29): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(21,29): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(25,31): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(26,31): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(30,26): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(31,26): warning C4244: "=": konwersja z "int" do "float", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(58,32): warning C4244: "=": konwersja z "double" do "int", możliwa utrata danych
+  RPG_gra.cpp
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\RPG_gra.cpp(13,12): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\RPG_gra.cpp(36,17): warning C4805: "==": niebezpieczne połączenie typu "int" oraz typu "bool" w operacji
+  Generowanie kodu...
+C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\Funkcje.cpp(35): warning C4715: "get_item”: niewszystkie ścieżki kodu zwracają wartość
+  RPG_gra.vcxproj -> C:\Users\janko\Downloads\RPG_gra (1)\RPG_gra\x64\Debug\RPG_gra.exe

@@ -11,3 +11,5 @@ void construct_item(item* A);
 void check_item(item A);
 void put_in_inventory(inventory inv, item new_item);
 void stat_regen(character *hero);
+void drop_item(inventory inv);
+void check_inventory(inventory inv);

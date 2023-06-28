@@ -1,36 +1,41 @@
 #include "Funkcje.h"
 item get_item(itemtype type)
 {
+	item returned_item;
+	construct_item(&returned_item);
 	switch (type)
 	{
 	case sword:
-		item sword;
-		sword.attack = rand() % 10;
-		sword.SPbonus = rand() % 100;
-		return sword;
+		returned_item.attack = rand() % 10;
+		returned_item.SPbonus = rand() % 100;
+		returned_item.size_y = rand() % 2 + 1;
 		break;
 	case helmet:
-		item helmet;
-		helmet.defense = rand() % 10;
-		sword.HPbonus = rand() % 100;
-		return helmet;
+		returned_item.defense = rand() % 10;
+		returned_item.HPbonus = rand() % 100;
+		returned_item.size_y = rand() % 2 + 1;
+		returned_item.size_x = rand() % 2 + 1;
+		break;
 	case leggings:
-		item leggings;
-		leggings.defense = rand() % 15;
-		leggings.HPbonus = rand() % 150;
-		leggings.SPbonus = rand() % 200;
-		return leggings;
+		returned_item.defense = rand() % 15;
+		returned_item.HPbonus = rand() % 150;
+		returned_item.SPbonus = rand() % 200;
+		returned_item.size_y = rand() % 3 + 1;
+		break;
 	case chestplate:
-		item chestplate;
-		chestplate.defense = rand() % 40;
-		chestplate.HPbonus = rand() % 300;
-		return chestplate;
+		returned_item.defense = rand() % 40;
+		returned_item.HPbonus = rand() % 300;
+		returned_item.size_y = rand() % 3 + 1;
+		returned_item.size_x = rand() % 2 + 2;
+		break;
 	case boots:
-		item boots;
-		boots.defense = rand() % 10;
-		boots.SPbonus = rand() % 100;
+		returned_item.defense = rand() % 10;
+		returned_item.SPbonus = rand() % 100;
+		returned_item.size_y = rand() % 2 + 1;
+		returned_item.size_x = rand() % 2 + 1;
+		break;
 	}
-	
+	return returned_item;
 	
 }
 
@@ -137,12 +142,14 @@ int fight(enemy* monster, character *hero)
 }
 void initialize_inventory(int size_x, int size_y, inventory* new_inventory)
 {
+	new_inventory->size_x = size_x;
+	new_inventory->size_y = size_y;
 	new_inventory->item_arr = (item***)malloc(size_y * sizeof(item**));
-	for (size_t i = 0; i < size_y; i++)
+	for (int i = 0; i < size_y; i++)
 	{
 		new_inventory->item_arr[i] = (item**)malloc(size_x * sizeof(item*));
 	}
-	for (size_t i = 0; i < size_y; i++)
+	for (int i = 0; i < size_y; i++)
 	{
 		for (size_t j = 0; j < size_x; j++)
 		{
@@ -155,19 +162,48 @@ void construct_item(item* A)
 	A->attack = 0;
 	A->defense = 0;
 	A->HPbonus = 0;
-	A->lvl = 0;
+	A->lvl = 1;
 	A->SPbonus = 0;
 	A->weight = 0;
+	A->position.x = 0;
+	A->position.y = 0;
+	A->size_x = 1;
+	A->size_y = 1;
 }
 void check_item(item A)
 {
 	system("cls");
-	std::cout << A.attack << std::endl;
-	std::cout << A.defense << std::endl ;
-	std::cout << A.HPbonus << std::endl;
-	std::cout << A.SPbonus << std::endl;
-	std::cout << A.weight << std::endl;
-	std::cout << A.lvl << std::endl;
+	if (A.attack > 0) std::cout <<"attack" << A.attack << std::endl;
+	if (A.defense > 0)std::cout <<"defense: " << A.defense << std::endl;
+	if (A.HPbonus > 0)std::cout <<"bonus HP: " << A.HPbonus << std::endl;
+	if (A.SPbonus > 0)std::cout <<"bonus SP: " << A.SPbonus << std::endl;
+	if (A.weight > 0)std::cout <<"weight: " << A.weight << std::endl;
+	if (A.lvl > 0) std::cout <<"lvl: " << A.lvl << std::endl;
+}
+void check_inventory(inventory inv)
+{
+	system("cls");
+	for (int i = -1; i < inv.size_y; i++)
+	{
+		for (int j = -1; j < inv.size_x; j++)
+		{
+			if (i == -1)
+			{
+				std::cout << j+1 << "		";
+			}
+			else if (j == -1)
+			{
+				std::cout << i+1 << " ";
+			}
+			else
+			{
+				std::cout << inv.item_arr[i][j] << " ";
+			}
+		}
+		std::cout << std::endl;
+	}
+	std::cout << "press any key to continue";
+	_getch();
 }
 void stat_regen(character *hero)
 {
@@ -188,7 +224,65 @@ void stat_regen(character *hero)
 		hero->currentSP = hero->SP;
 	}
 }
-void put_in_inventory(inventory inv, item new_item)
+int inventory_space(inventory inv, item* new_item)
 {
+	int starting_x, starting_y;
+	int temp = 0;
+	for (starting_y = 0; starting_y < inv.size_y; starting_y++)
+	{
+		
+		for (starting_x = 0; starting_x < inv.size_x; starting_x++)
+		{
+			temp = 0;
+			for (int i = 0; i < new_item->size_y + starting_y; i++)
+			{
+				for (int j = 0; j < new_item->size_x + starting_x; j++)
+				{
+					if (j + new_item->size_x < inv.size_x && i + new_item->size_y < inv.size_y)
+					{
+						if (inv.item_arr[i][j] == NULL)
+						{
+							temp++;
+						}
+					}
+				}
 
+			}
+			if (temp == new_item->size_x * new_item->size_y)
+			{
+				new_item->position.x = starting_x;
+				new_item->position.y = starting_y;
+				return 0;
+			}
+		}
+	}
+}
+void put_in_inventory(inventory inv, item *new_item)
+{
+	inventory_space(inv, new_item);
+	for (int i = new_item->position.y; i < new_item->position.y + new_item->size_y; i++)
+	{
+		for (int j = new_item->position.x; j < new_item->position.x + new_item->size_x; j++)
+		{
+			inv.item_arr[i][j] = new_item;
+		}
+	}
 };
+void drop_item(inventory inv)
+{
+	item* tempitem = (item*)malloc(sizeof(item));
+	char button;
+	*tempitem = get_item((itemtype)(rand() % 5));
+	check_item(*tempitem);
+	std::cout << "press 1 to accept item or 0 to trash item";
+	do
+	{
+		button = _getch();
+		switch (button)
+		{
+		case '1':
+			put_in_inventory(inv, tempitem);
+			break;
+		}
+	} while (button != '1' && button != '0');
+}

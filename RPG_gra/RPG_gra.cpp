@@ -32,6 +32,7 @@ int main()
 	int current_enemies = 0;
 	int infight = 0;
 	int fighted_enemy;
+	char button;
 	//petla gry
 	while (game == true)
 	{
@@ -99,6 +100,9 @@ int main()
 		case 'x':
 			game = 0;
 			break;
+		case 'c':
+			check_inventory(backpack);
+			break;
 		case 32:
 			for (int i = 0; i < current_map.maxEnemies; i++)
 			{
@@ -110,42 +114,31 @@ int main()
 					switch (outcome)
 					{
 					case 1:
-						item * tempitem = (item*)malloc(sizeof(item));
-						construct_item(tempitem);
-						*tempitem=get_item((itemtype)(rand()%5));
-						check_item(*tempitem);
-						std::cout << "press 1 to accept item or 0 to trash item";
-						free(tempitem);
+						//if (rand() % 5 == 0)
+						{
+							drop_item(backpack);
+							
+						}
+						current_map.tile[enemies[i]->position.y][enemies[i]->position.x] = 1;
+						free(enemies[i]);
+						enemies[i] = (enemy*)malloc(sizeof(enemy));
+						current_enemies--;
 						break;
 					}
+					
 				}
 
 			}
 		}
 
-		if (hero.currentHP + hero.HPregen <= hero.HP)
-		{
-			hero.currentHP += hero.HPregen;
-		}
-		else if (hero.currentHP < hero.HP)
-		{
-			hero.currentHP = hero.HP;
-		}
-		if (hero.currentSP + hero.SPregen <= hero.SP)
-		{
-			hero.currentSP += hero.SPregen;
-		}
-		else if (hero.currentSP < hero.SP)
-		{
-			hero.currentSP = hero.SP;
-		}
+		stat_regen(&hero);
 		//tworzenie losowych wrogow
 
 		if (rand() % 1 == 0 && current_enemies < current_map.maxEnemies)
 		{
 
 			get_enemy(enemies[current_enemies], current_map.maplvl);
-			if (current_map.tile[enemies[current_enemies]->position.y - 1][enemies[current_enemies]->position.x - 1] != 1)
+			if (current_map.tile[enemies[current_enemies]->position.y][enemies[current_enemies]->position.x] != 1)
 			{
 				free(enemies[current_enemies]);
 				//enemies[current_enemies] = NULL;
@@ -154,8 +147,7 @@ int main()
 			}
 			else
 			{
-				current_map.tile[enemies[current_enemies]->position.y - 1][enemies[current_enemies]->position.x - 1] = 4;
-
+				current_map.tile[enemies[current_enemies]->position.y][enemies[current_enemies]->position.x] = 4;
 				current_enemies++;
 			}
 

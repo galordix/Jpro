@@ -9,6 +9,8 @@ struct wektor
 struct item
 {
 	float attack, defense, HPbonus, SPbonus, weight, lvl;
+	int size_x, size_y;
+	wektor position;
 };
 struct character
 {

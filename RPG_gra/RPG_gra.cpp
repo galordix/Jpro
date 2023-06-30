@@ -71,8 +71,8 @@ int main()
 			}
 			printf("\n");
 		}
-		std::cout << "HP " << hero.currentHP << "/" << hero.HP << std::endl;
-		if (infight) std::cout << "monster HP " << enemies[fighted_enemy]->currentHP << "/" << enemies[fighted_enemy]->HP << std::endl;
+		write_stats(hero);
+		std::cout << "Press [WASD] to move, [C] to open backpack, [Spacebar] to attack enemy, [X] to close game." << std::endl;
 		//kontrole
 		infight = 0;
 		switch (_getch())
@@ -101,12 +101,15 @@ int main()
 			game = 0;
 			break;
 		case 'c':
-			check_inventory(backpack);
+			check_inventory(&backpack, &hero);
 			break;
 		case 32:
 			for (int i = 0; i < current_map.maxEnemies; i++)
 			{
-				if ((enemies[i]->position.x == hero.position.x + 1 && enemies[i]->position.y == hero.position.y) || (enemies[i]->position.x == hero.position.x - 1 && enemies[i]->position.y == hero.position.y) || (enemies[i]->position.x == hero.position.x && enemies[i]->position.y == hero.position.y + 1) || (enemies[i]->position.x == hero.position.x && enemies[i]->position.y == hero.position.y - 1))
+				if ((enemies[i]->position.x == hero.position.x + 1 && enemies[i]->position.y == hero.position.y) ||
+					(enemies[i]->position.x == hero.position.x - 1 && enemies[i]->position.y == hero.position.y) ||
+					(enemies[i]->position.x == hero.position.x && enemies[i]->position.y == hero.position.y + 1) ||
+					(enemies[i]->position.x == hero.position.x && enemies[i]->position.y == hero.position.y - 1))
 				{
 					int outcome = fight(enemies[i], &hero);
 					infight = 1;
@@ -114,15 +117,32 @@ int main()
 					switch (outcome)
 					{
 					case 1:
-						//if (rand() % 5 == 0)
+						//if (rand() % 4 == 0)
 						{
-							drop_item(backpack);
+							drop_item(&backpack, hero);
 							
 						}
+						hero.exp += enemies[i]->lvl * 20;
+						if (hero.exp >= hero.exp_next)
+						{
+							level_up(&hero);
+						}
 						current_map.tile[enemies[i]->position.y][enemies[i]->position.x] = 1;
-						free(enemies[i]);
-						enemies[i] = (enemy*)malloc(sizeof(enemy));
+						for (int j = i; j < current_enemies-1; j++)
+						{
+							*enemies[j] = *enemies[j + 1];
+						}
+						free(enemies[current_enemies-1]);
+						enemies[current_enemies-1]= (enemy*)malloc(sizeof(enemy));
 						current_enemies--;
+						
+						break;
+					case 0:
+						enemies[i]->currentHP = enemies[i]->HP;
+						break;
+					case -1:
+						if (hero.exp - 20 >= 0)hero.exp -= 20;
+						enemies[i]->currentHP = enemies[i]->HP;
 						break;
 					}
 					
@@ -134,7 +154,7 @@ int main()
 		stat_regen(&hero);
 		//tworzenie losowych wrogow
 
-		if (rand() % 1 == 0 && current_enemies < current_map.maxEnemies)
+		if (rand() % 5 == 0 && current_enemies < current_map.maxEnemies)
 		{
 
 			get_enemy(enemies[current_enemies], current_map.maplvl);
@@ -166,7 +186,7 @@ int main()
 	{
 		free(enemies[i]);
 	}
-	for (int i = 0; i < current_map.size_y; i++)
+	for (int i = 0; i < current_map.size_y - 1; i++)
 	{
 		free(current_map.tile[i]);
 	}
@@ -174,9 +194,10 @@ int main()
 	free(hero.equipment);
 	for (int i = 0; i < backpack.size_y; i++)
 	{
-		free(&backpack.item_arr[i]);
+		free(backpack.item_arr[i]);
+
 	}
-	free(&backpack);
+	free(backpack.item_arr);
 	free(maps);
 }
 
